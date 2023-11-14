@@ -259,6 +259,7 @@ ol {
 	display: inline-block;
 	float: left;
 	padding-top: 6px;
+	font-size: 2.5rem;
 }
 
 .user-panel {
@@ -289,7 +290,7 @@ ol {
 
 .main-menu ul li a {
 	display: inline-block;
-	font-size: 16px;
+	font-size: 20px;
 	color: #fff;
 	margin-left: 35px;
 	font-weight: 500;
@@ -712,6 +713,11 @@ ol {
 	font-size: 12px;
 }
 
+.review-item .review-cover .btn-success {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
 /*----------------------
   Footer top Section
 ------------------------*/

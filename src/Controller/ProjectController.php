@@ -80,7 +80,7 @@ class ProjectController extends AbstractController
 
 
     #[Route('/movies', name: 'movies_index', methods:['get'] )]
-    public function index(ManagerRegistry $doctrine): JsonResponse
+    public function index(ManagerRegistry $doctrine): Response
     {
         $movies = $doctrine
             ->getRepository(Movie::class)
@@ -96,7 +96,9 @@ class ProjectController extends AbstractController
             ];
         }
     
-        return $this->json($data);
+        return $this->render("project/myfavs.html.twig", [
+            "movies" => $data,
+        ]);
     }
   
   
