@@ -42,13 +42,9 @@ class ProjectController extends AbstractController
                     'movies' => $moviesData,
                 ]);
             } else {
-                // Manejar el error de acuerdo a tus necesidades
-                // Aquí puedes lanzar una excepción o mostrar un mensaje de error
                 throw new \Exception('Error en la solicitud a la API: ' . $statusCode);
             }
         } catch (\Exception $e) {
-            // Manejar cualquier excepción que pueda ocurrir durante la solicitud
-            // Aquí puedes registrar el error, mostrar un mensaje amigable, etc.
             return new Response('Error: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -77,9 +73,18 @@ class ProjectController extends AbstractController
   
   
     #[Route('/newMovie', name: 'new_movie', methods:['post'] )]
-    public function create(ManagerRegistry $doctrine, Request $request): JsonResponse
+    public function create(ManagerRegistry $doctrine, Request $request): Response
     {
         $entityManager = $doctrine->getManager();
+
+        $existingMovie = $entityManager->getRepository(Movie::class)->findOneBy([
+        'movie_id' => $request->request->get('movie_id'),
+        ]);
+
+        if ($existingMovie) {
+        // La película ya está en favoritos, puedes manejar esto según tus necesidades
+        return $this->json(['message' => 'Movie already in favorites']);
+    }
     
         $movie = new Movie();
         $movie->setTitle($request->request->get('title'));
@@ -96,7 +101,9 @@ class ProjectController extends AbstractController
             'movie_id' => $movie->getMovieId(),
         ];
             
-        return $this->json($data);
+        return $this->render("project/newMovie.html.twig", [
+            "movie" => $data,
+        ]);
     }
   
   
