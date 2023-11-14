@@ -14,51 +14,51 @@ class Movie
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $description = null;
+    private ?string $poster_path = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $gender = null; 
+    #[ORM\Column]
+    private ?int $movie_id = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getMovieId(): ?int
     {
-        return $this->name;
+        return $this->movie_id;
     }
 
-    public function setName(string $name): static
+    public function setMovieId(int $movie_id): static
     {
-        $this->name = $name;
+        $this->movie_id = $movie_id;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getTitle(): ?string
     {
-        return $this->description;
+        return $this->title;
     }
 
-    public function setDescription(string $description): static
+    public function setTitle(string $title): static
     {
-        $this->description = $description;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getGender(): ?string
+    public function getPosterPath(): ?string
     {
-        return $this->gender;
+        return $this->poster_path;
     }
 
-    public function setGender(string $gender): static
+    public function setPosterPath(string $poster_path): static
     {
-        $this->gender = $gender;
+        $this->poster_path = $poster_path;
 
         return $this;
     } 

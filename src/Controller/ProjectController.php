@@ -4,9 +4,11 @@ namespace App\Controller;
   
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpClient\HttpClient;
 use App\Entity\Movie;
   
 #[Route('/api', name: 'api_')]
@@ -24,8 +26,8 @@ class ProjectController extends AbstractController
         foreach ($movies as $movie) {
             $data[] = [
                 'id' => $movie->getId(),
-                'name' => $movie->getName(),
-                'description' => $movie->getDescription(),
+                'title' => $movie->getTitle(),
+                'poster_path' => $movie->getPosterPath(),
             ];
         }
     
@@ -39,17 +41,18 @@ class ProjectController extends AbstractController
         $entityManager = $doctrine->getManager();
     
         $movie = new Movie();
-        $movie->setName($request->request->get('name'));
-        $movie->setDescription($request->request->get('description'));
-        $movie->setGender($request->request->get('gender'));
+        $movie->setTitle($request->request->get('title'));
+        $movie->setPosterPath($request->request->get('poster_path'));
+        $movie->setMovieId($request->request->get('movie_id'));
     
         $entityManager->persist($movie);
         $entityManager->flush();
     
         $data =  [
             'id' => $movie->getId(),
-            'name' => $movie->getName(),
-            'gender' => $movie->getGender(),
+            'title' => $movie->getTitle(),
+            'poster_path' => $movie->getPosterPath(),
+            'movie_id' => $movie->getMovieId(),
         ];
             
         return $this->json($data);
@@ -68,12 +71,33 @@ class ProjectController extends AbstractController
     
         $data =  [
             'id' => $movie->getId(),
-            'name' => $movie->getName(),
-            'description' => $movie->getDescription(),
+            'title' => $movie->getTitle(),
+            'poster_path' => $movie->getPosterPath(),
         ];
             
         return $this->json($data);
     }
 
+    #[Route(path:"/apiMovies", name:"homepage")]
+  public function homepage() : Response
+  {
+    $apiKey = ENV['API_KEY']; 
+    
+    $apiUrl = "https://api.themoviedb.org/3/movie/popular?api_key={$apiKey}&language=en-US&page=1";
+    $httpClient = HttpClient::create();
+    $response = $httpClient->request('GET', $apiUrl, [
+                'query' => [
+                    'api_key' => $apiKey,
+                    'language' => 'en-US',
+                ],
+                ]);
+    $responseData = $response->toArray();
+        // Obtener la lista de películas desde la respuesta de la API
+        $moviesData = isset($responseData['results']) ? $responseData['results'] : [];
+        return $this->render('home/homepage.html.twig', [
+            'title' => 'Popular Movies',
+            'movies' => $moviesData,
+        ]);
+    }
 
 }
