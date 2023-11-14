@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+	<section class="review-section review-dark spad set-bg">
+		<div class="container">
+			<div class="section-title text-white">
+				<div class="cata new">new</div>
+				<h2>Película añadida a favoritos</h2>
+			</div>
+			<div class="row text-white">
+				<div class="col-lg-3 col-md-6">
+					<div class="review-item">
+						<div class="review-cover set-bg" style="background-image: url('https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}'); height: 400px; background-size: cover; background-position: center;">
+							<div class="score yellow">9.3</div>
+						</div>
+						<div class="review-text">
+							<h5>{{ movie.title }}</h5>
+							<p></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+{% endblock %}

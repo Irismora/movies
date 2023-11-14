@@ -53,32 +53,6 @@ class ProjectController extends AbstractController
         }
     }
 
-
-/*       #[Route(path:"/home", name:"homepage")]
-  public function homepage() : Response
-  {
-    $apiKey = ENV['API_KEY']; 
-    
-    $apiUrl = "https://api.themoviedb.org/3/movie/popular?api_key={$apiKey}&language=en-US&page=1";
-    $httpClient = HttpClient::create();
-    $response = $httpClient->request('GET', $apiUrl, [
-                'query' => [
-                    'api_key' => $apiKey,
-                    'language' => 'en-US',
-                ],
-                ]);
-    $responseData = $response->toArray();
-        // Obtener la lista de películas desde la respuesta de la API
-        $moviesData = isset($responseData['results']) ? $responseData['results'] : [];
-        return $this->render('project/homepage.html.twig', [
-            'title' => 'Popular Movies',
-            'movies' => $moviesData,
-        ]);
-    } */
-
-
-
-
     #[Route('/movies', name: 'movies_index', methods:['get'] )]
     public function index(ManagerRegistry $doctrine): Response
     {

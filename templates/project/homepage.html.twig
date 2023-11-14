@@ -13,7 +13,14 @@
 					<div class="review-item">
 						<div class="review-cover set-bg" style="background-image: url('https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}'); height: 400px; background-size: cover; background-position: center;">
 							<div class="score yellow">{{movie.vote_average|round(1)}}</div>
-							<div><button type="button" class="btn btn-success"> Add to favs </button></div>
+
+							<form method="post" action="{{path("api_new_movie")}}">
+                <input type="hidden" name="title" value="{{ movie.title }}">
+                <input type="hidden" name="poster_path" value="{{ movie.poster_path }}">
+                <input type="hidden" name="movie_id" value="{{ movie.id }}">
+                <div><button type="submit" class="btn btn-success"> Add to favs </button></div>
+              </form>
+							
 						</div>
 						<div class="review-text">
 							<h4>{{ movie.title }}</h4>
@@ -25,13 +32,5 @@
       </div>
 	</section>
 	<!-- Page section end -->
-
-
-
-{# <h1> {{title}}</h1>
-
-{% for movie in movies %}
-<p>{{movie.title}} - {{movie.poster_path}} - {{movie.id}}</p> 
-{% endfor %} #}
 
 {% endblock %}
