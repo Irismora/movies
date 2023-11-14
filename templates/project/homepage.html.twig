@@ -1,5 +1,36 @@
-<h1> {{title}}</h1>
+{% extends 'base.html.twig' %}
+
+{% block title %}Popular Movies{% endblock %}
+
+{% block body %}
+
+	<!-- Page section -->
+	<section class="page-section review-page spad">
+		<div class="container">
+			<div class="row">
+        {% for movie in movies %}
+				<div class="col-md-6">
+					<div class="review-item">
+						<div class="review-cover set-bg" style="background-image: url('https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}'); height: 400px; background-size: cover; background-position: center;">
+							<div class="score yellow">{{movie.vote_average|round(1)}}</div>
+						</div>
+						<div class="review-text">
+							<h4>{{ movie.title }}</h4>
+						</div>
+					</div>
+				</div>
+        {% endfor %}
+      </div>
+      </div>
+	</section>
+	<!-- Page section end -->
+
+
+
+{# <h1> {{title}}</h1>
 
 {% for movie in movies %}
 <p>{{movie.title}} - {{movie.poster_path}} - {{movie.id}}</p> 
-{% endfor %}
+{% endfor %} #}
+
+{% endblock %}
