@@ -15,39 +15,42 @@ use App\Entity\Movie;
 #[Route('/api', name: 'api_')]
 class ProjectController extends AbstractController
 {
+#[Route(path: '/home', name: 'homepage')]
+public function homepage(HttpClientInterface $httpClient): Response
+{
+    $apiKey = ENV['API_KEY'];
+    $apiUrl = "https://api.themoviedb.org/3/movie/popular";
 
-  #[Route(path: '/home', name: 'homepage')]
-    public function homepage(HttpClientInterface $httpClient): Response
-    {
-        $apiKey = ENV['API_KEY'];
-        $apiUrl = "https://api.themoviedb.org/3/movie/popular?api_key={$apiKey}&language=en-US&page=1";
+    try {
+        $moviesData = [];
 
-        try {
+        for ($page = 1; $page <= 5; $page++) {  
             $response = $httpClient->request('GET', $apiUrl, [
                 'query' => [
                     'api_key' => $apiKey,
                     'language' => 'en-US',
+                    'page' => $page,
                 ],
             ]);
 
             $statusCode = $response->getStatusCode();
             $content = $response->toArray();
-            
-            // Verificar si la solicitud fue exitosa (código 2xx)
+
             if ($statusCode >= 200 && $statusCode < 300) {
-                $moviesData = $content['results'] ?? [];
-                
-                return $this->render('project/homepage.html.twig', [
-                    'title' => 'Popular Movies',
-                    'movies' => $moviesData,
-                ]);
+                $moviesData = array_merge($moviesData, $content['results'] ?? []);
             } else {
                 throw new \Exception('Error en la solicitud a la API: ' . $statusCode);
             }
-        } catch (\Exception $e) {
-            return new Response('Error: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        return $this->render('project/homepage.html.twig', [
+            'title' => 'Popular Movies',
+            'movies' => $moviesData,
+        ]);
+    } catch (\Exception $e) {
+        return new Response('Error: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
+}
 
     #[Route('/movies', name: 'movies_index', methods:['get'] )]
     public function index(ManagerRegistry $doctrine): Response
@@ -70,8 +73,8 @@ class ProjectController extends AbstractController
             "movies" => $data,
         ]);
     }
-  
-  
+    
+    
     #[Route('/newMovie', name: 'new_movie', methods:['post'] )]
     public function create(ManagerRegistry $doctrine, Request $request): Response
     {
@@ -82,7 +85,6 @@ class ProjectController extends AbstractController
         ]);
 
         if ($existingMovie) {
-        // La película ya está en favoritos, puedes manejar esto según tus necesidades
         return $this->json(['message' => 'Movie already in favorites']);
     }
     
@@ -105,8 +107,8 @@ class ProjectController extends AbstractController
             "movie" => $data,
         ]);
     }
-  
-  
+    
+    
     #[Route('/movie/{id}', name: 'movie_detail', methods:['get'] )]
     public function show(ManagerRegistry $doctrine, int $id): JsonResponse
     {
