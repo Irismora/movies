@@ -1,0 +1,5 @@
+<h1> {{title}}</h1>
+
+{% for movie in movies %}
+<p>{{movie.title}} - {{movie.poster_path}} - {{movie.id}}</p> 
+{% endfor %}
