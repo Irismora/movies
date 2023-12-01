@@ -18,7 +18,7 @@ class ProjectController extends AbstractController
 #[Route(path: '/home', name: 'homepage')]
 public function homepage(HttpClientInterface $httpClient): Response
 {
-    $apiKey = ENV['API_KEY'];
+    $apiKey = $_ENV['API_KEY'];
     $apiUrl = "https://api.themoviedb.org/3/movie/popular";
 
     try {
